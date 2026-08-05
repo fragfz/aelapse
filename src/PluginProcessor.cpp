@@ -1,5 +1,7 @@
 #include "PluginProcessor.h"
+#ifndef MOD_DWARF
 #include "GUI/PluginEditor.h"
+#endif
 #include "Presets/PresetManager.h"
 #include "juce_audio_basics/juce_audio_basics.h"
 #include "juce_audio_processors/juce_audio_processors.h"
@@ -111,7 +113,11 @@ PluginProcessor::createLayout()
 //==============================================================================
 juce::AudioProcessorEditor *PluginProcessor::createEditor()
 {
+#ifndef MOD_DWARF
     return new PluginEditor(*this);
+#else
+    return nullptr;
+#endif
 }
 
 //==============================================================================
