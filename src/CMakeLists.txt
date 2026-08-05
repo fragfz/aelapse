@@ -22,5 +22,8 @@ if(DSP_X86_DISPATCH)
     endif()
 endif()
 
-add_subdirectory(GUI/)
 add_subdirectory(Presets/)
+
+if(NOT MOD_DWARF)
+    add_subdirectory(GUI/)
+endif()

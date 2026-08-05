@@ -7,6 +7,8 @@ set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 project(Aelapse VERSION 1.0.0)
 set(COMPANY_NAME "S-audio")
 
+option(MOD_DWARF "Build headless (no GUI/X11) for MOD Dwarf and similar embedded targets" OFF)
+
 set(CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE TRUE)
 
 find_package(JUCE CONFIG QUIET)
@@ -70,6 +72,7 @@ target_compile_definitions(${PROJECT_NAME}
         SPRINGS_RMS
         SPRINGS_SHAKE
         TAPEDELAY_SWITCH_INDICATOR
+        $<$<BOOL:${MOD_DWARF}>:MOD_DWARF>
     )
 
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
@@ -90,12 +93,9 @@ set_property(TARGET dsp_include PROPERTY SYSTEM TRUE)
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
-        ${PROJECT_NAME}_assets
         ${PROJECT_NAME}_factory
-        ${PROJECT_NAME}_fonts
         juce::juce_audio_utils
         juce::juce_audio_plugin_client
-        juce::juce_opengl
         readerwriterqueue
         dsp_springs_processor
         dsp_tapedelay_processor
@@ -103,3 +103,12 @@ target_link_libraries(${PROJECT_NAME}
         juce::juce_recommended_config_flags
         juce::juce_recommended_warning_flags
     )
+
+if(NOT MOD_DWARF)
+    target_link_libraries(${PROJECT_NAME}
+        PRIVATE
+            ${PROJECT_NAME}_assets
+            ${PROJECT_NAME}_fonts
+            juce::juce_opengl
+        )
+endif()

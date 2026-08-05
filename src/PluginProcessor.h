@@ -24,7 +24,14 @@ class PluginProcessor : public juce::AudioProcessor,
 
     //==============================================================================
     juce::AudioProcessorEditor *createEditor() override;
-    bool hasEditor() const override { return true; }
+    bool hasEditor() const override
+    {
+#ifndef MOD_DWARF
+        return true;
+#else
+        return false;
+#endif
+    }
     //==============================================================================
     const juce::String getName() const override;
 
