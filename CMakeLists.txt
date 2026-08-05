@@ -7,7 +7,7 @@ set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 project(Aelapse VERSION 1.0.0)
 set(COMPANY_NAME "S-audio")
 
-option(MOD_DWARF "Build headless (no GUI/X11) for MOD Dwarf and similar embedded targets" OFF)
+option(MOD_DWARF "Build headless (no GUI/X11) for MOD Dwarf and similar embedded targets" ON)
 
 set(CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE TRUE)
 
@@ -23,13 +23,6 @@ if(NOT ${JUCE_FOUND})
     FetchContent_MakeAvailable(JUCE)
 endif()
 
-set(JUCE_FORMATS VST3 AU)
-# Build LV2 only on Linux
-if(UNIX AND NOT APPLE)
-    message(STATUS "Building LV2 plugin format")
-    list(APPEND JUCE_FORMATS LV2)
-endif()
-
 juce_add_plugin(${PROJECT_NAME}
     COMPANY_NAME "${COMPANY_NAME}"
     IS_SYNTH FALSE
@@ -42,7 +35,7 @@ juce_add_plugin(${PROJECT_NAME}
     PLUGIN_CODE Aeth
     LV2URI https://github.com/smiarx/aelapse
 
-    FORMATS VST3 ${JUCE_FORMATS}
+    FORMATS LV2
     PRODUCT_NAME "${PROJECT_NAME}")
 
 # tests
