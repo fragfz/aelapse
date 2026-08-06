@@ -66,6 +66,7 @@ target_compile_definitions(${PROJECT_NAME}
         SPRINGS_SHAKE
         TAPEDELAY_SWITCH_INDICATOR
         $<$<BOOL:${MOD_DWARF}>:MOD_DWARF>
+        JUCE_AUDIOPROCESSOR_NO_GUI=1
     )
 
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
