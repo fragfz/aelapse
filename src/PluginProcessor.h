@@ -23,15 +23,13 @@ class PluginProcessor : public juce::AudioProcessor,
     bool isBusesLayoutSupported(const BusesLayout &layouts) const override;
 
     //==============================================================================
-    juce::AudioProcessorEditor *createEditor() override;
+#if !JUCE_AUDIOPROCESSOR_NO_GUI
+   juce::AudioProcessorEditor *createEditor() override;
     bool hasEditor() const override
     {
-#ifndef MOD_DWARF
         return true;
-#else
-        return false;
-#endif
     }
+#endif
     //==============================================================================
     const juce::String getName() const override;
 
