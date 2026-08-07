@@ -111,14 +111,12 @@ PluginProcessor::createLayout()
 }
 
 //==============================================================================
+#ifndef MOD_DWARF
 juce::AudioProcessorEditor *PluginProcessor::createEditor()
 {
-#ifndef MOD_DWARF
     return new PluginEditor(*this);
-#else
-    return nullptr;
-#endif
 }
+#endif
 
 //==============================================================================
 const juce::String PluginProcessor::getName() const { return JucePlugin_Name; }
