@@ -11,17 +11,7 @@ option(MOD_DWARF "Build headless (no GUI/X11) for MOD Dwarf and similar embedded
 
 set(CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE TRUE)
 
-find_package(JUCE CONFIG QUIET)
-if(NOT ${JUCE_FOUND})
-    Include(FetchContent)
-
-    FetchContent_Declare(
-      JUCE
-      GIT_REPOSITORY https://github.com/juce-framework/JUCE
-      GIT_TAG        7.0.12
-    )
-    FetchContent_MakeAvailable(JUCE)
-endif()
+find_package(JUCE REQUIRED)
 
 juce_add_plugin(${PROJECT_NAME}
     COMPANY_NAME "${COMPANY_NAME}"
@@ -66,7 +56,11 @@ target_compile_definitions(${PROJECT_NAME}
         SPRINGS_SHAKE
         TAPEDELAY_SWITCH_INDICATOR
         $<$<BOOL:${MOD_DWARF}>:MOD_DWARF>
-        JUCE_AUDIOPROCESSOR_NO_GUI=1
+        JUCE_JACK=0
+        JUCE_ALSA=0
+        JucePlugin_WantsLV2Latency=0
+        JucePlugin_WantsLV2State=0
+        JucePlugin_WantsLV2TimePos=0
     )
 
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
@@ -98,11 +92,3 @@ target_link_libraries(${PROJECT_NAME}
         juce::juce_recommended_warning_flags
     )
 
-if(NOT MOD_DWARF)
-    target_link_libraries(${PROJECT_NAME}
-        PRIVATE
-            ${PROJECT_NAME}_assets
-            ${PROJECT_NAME}_fonts
-            juce::juce_opengl
-        )
-endif()
